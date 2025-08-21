@@ -3,13 +3,20 @@ const pool = require("../db");
 const getInvoices = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT invoices.*, customers.name as customer_name 
-       FROM invoices 
+      `SELECT 
+         invoices.id,
+         invoices.customer_id,
+         invoices.total_amount,
+         invoices.discount,
+         invoices.payment_method,
+         invoices.created_at,
+         customers.name AS customer_name
+       FROM invoices
        LEFT JOIN customers ON invoices.customer_id = customers.id`
     );
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching invoices:", err);
     res.status(500).json({ error: "Database error" });
   }
 };
@@ -21,7 +28,7 @@ const addInvoice = async (req, res) => {
     // Insert invoice
     const invoiceResult = await pool.query(
       "INSERT INTO invoices (customer_id, total_amount, discount, payment_method) VALUES ($1,$2,$3,$4) RETURNING *",
-      [customer_id, total_amount, discount, payment_method]
+      [customer_id || null, total_amount, discount, payment_method] // handle null customer
     );
 
     const invoice_id = invoiceResult.rows[0].id;
@@ -41,7 +48,7 @@ const addInvoice = async (req, res) => {
 
     res.json({ message: "Invoice created", invoice_id });
   } catch (err) {
-    console.error(err);
+    console.error("Error adding invoice:", err);
     res.status(500).json({ error: "Database error" });
   }
 };
