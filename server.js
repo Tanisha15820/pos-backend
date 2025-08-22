@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const fetch = require("node-fetch"); // npm install node-fetch
+const serverless = require("serverless-http");
 
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
@@ -30,5 +31,5 @@ app.use("/api/invoices", invoiceRoutes);
 //     console.error("Ping failed", err);
 //   }
 // }, 5 * 60 * 1000); // every 5 minutes
-module.exports = app;
+
 module.exports.handler = serverless(app);
