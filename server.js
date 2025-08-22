@@ -19,8 +19,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/invoices", invoiceRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//const PORT = process.env.PORT || 5000;
+//app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // setInterval(async () => {
 //   try {
@@ -30,3 +30,5 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //     console.error("Ping failed", err);
 //   }
 // }, 5 * 60 * 1000); // every 5 minutes
+module.exports = app;
+module.exports.handler = serverless(app);
