@@ -75,7 +75,7 @@ const getInvoices = async (req, res) => {
   }
 };
 
-mo
+
 const addInvoice = async (req, res) => {
   const { customer_id, total_amount, discount, payment_method, items } = req.body;
 
